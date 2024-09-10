@@ -18,6 +18,7 @@ func _physics_process(delta: float) -> void:
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	var run_multiplier = 1
 	
+	# Ability to run
 	if Input.is_action_pressed("run"):
 		run_multiplier = 2
 	else:
@@ -28,15 +29,26 @@ func _physics_process(delta: float) -> void:
 		velocity.x = direction * SPEED * run_multiplier
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED * run_multiplier)
-		
+	
+	# Flip sprite depending on direction you're facing.
 	if velocity.x < 0:
 		$AnimatedSprite2D.flip_h = true
 	if velocity.x > 0:
 		$AnimatedSprite2D.flip_h = false
 		
+	# Run or idle animation depending on whether you're running or idling.
 	if velocity.x != 0:
 		$AnimatedSprite2D.play("run")
 	else:
 		$AnimatedSprite2D.play("idle")
 
 	move_and_slide()
+
+# Player respawn.
+func killPlayer():
+	position = %RespawnPoint.position
+	$AnimatedSprite2D.flip_h = false
+
+# Player death.
+func _on_death_area_body_entered(body: Node2D) -> void:
+	killPlayer()

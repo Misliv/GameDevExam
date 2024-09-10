@@ -155,3 +155,4 @@ shape = SubResource("CapsuleShape2D_ww1p6")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(1.6, 1.6)
+limit_bottom = 125
