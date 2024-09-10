@@ -55,7 +55,7 @@ func _physics_process(delta: float) -> void:
 		newMagic.set_position(%MagicSpawnpoint.global_transform.origin)
 		get_parent().add_child(newMagic)
 			
-		$AnimationPlayer.play("attack")
+		$AnimatedSprite2D.play("attack")
 		
 
 # Player respawn.
