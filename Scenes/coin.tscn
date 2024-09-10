@@ -1,0 +1,65 @@
+[gd_scene load_steps=10 format=3 uid="uid://dneo6ajmfa6ox"]
+
+[ext_resource type="Texture2D" uid="uid://htvvthxhtvco" path="res://Assets/Legacy-Fantasy - High Forest 2.3/Assets/MonedaD.png" id="1_k81oo"]
+[ext_resource type="Script" path="res://Scripts/coin.gd" id="2_icog2"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vocc2"]
+atlas = ExtResource("1_k81oo")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qk0hi"]
+atlas = ExtResource("1_k81oo")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_22nj6"]
+atlas = ExtResource("1_k81oo")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ts2sm"]
+atlas = ExtResource("1_k81oo")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l53wk"]
+atlas = ExtResource("1_k81oo")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_scjkk"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vocc2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qk0hi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_22nj6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ts2sm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l53wk")
+}],
+"loop": true,
+"name": &"default",
+"speed": 12.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_hkbpt"]
+radius = 6.0
+height = 16.0
+
+[node name="Coins" type="AnimatedSprite2D"]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_scjkk")
+autoplay = "default"
+frame_progress = 0.533136
+script = ExtResource("2_icog2")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CapsuleShape2D_hkbpt")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

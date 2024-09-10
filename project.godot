@@ -19,6 +19,10 @@ config/icon="res://icon.svg"
 
 GameManager="*res://Scenes/game_manager.tscn"
 
+[global_group]
+
+Player=""
+
 [input]
 
 left={
