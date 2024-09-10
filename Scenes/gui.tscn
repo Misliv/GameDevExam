@@ -1,0 +1,73 @@
+[gd_scene load_steps=8 format=3 uid="uid://istweh6j0s08"]
+
+[ext_resource type="Texture2D" uid="uid://htvvthxhtvco" path="res://Assets/Legacy-Fantasy - High Forest 2.3/Assets/MonedaD.png" id="1_31thw"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7ajpe"]
+atlas = ExtResource("1_31thw")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jw8ma"]
+atlas = ExtResource("1_31thw")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_50xmd"]
+atlas = ExtResource("1_31thw")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ymmpv"]
+atlas = ExtResource("1_31thw")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pbosf"]
+atlas = ExtResource("1_31thw")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_p47vg"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7ajpe")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jw8ma")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_50xmd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ymmpv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pbosf")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="GUI" type="CanvasLayer"]
+
+[node name="CoinsValue" type="Label" parent="."]
+texture_filter = 1
+offset_left = 36.0
+offset_top = 7.0
+offset_right = 76.0
+offset_bottom = 49.0
+theme_override_font_sizes/font_size = 30
+text = "0
+"
+
+[node name="ScoreValue" type="Label" parent="."]
+texture_filter = 1
+offset_left = 10.0
+offset_top = 50.0
+offset_right = 50.0
+offset_bottom = 92.0
+theme_override_font_sizes/font_size = 30
+text = "0"
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+position = Vector2(20, 29)
+scale = Vector2(1.5, 1.5)
+sprite_frames = SubResource("SpriteFrames_p47vg")

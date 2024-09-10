@@ -54,7 +54,7 @@ height = 16.0
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_scjkk")
 autoplay = "default"
-frame_progress = 0.533136
+frame_progress = 0.825797
 script = ExtResource("2_icog2")
 
 [node name="Area2D" type="Area2D" parent="."]

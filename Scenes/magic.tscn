@@ -1,0 +1,22 @@
+[gd_scene load_steps=2 format=3 uid="uid://dalslci6kabti"]
+
+[sub_resource type="Gradient" id="Gradient_pqkl2"]
+colors = PackedColorArray(0.444339, 0.994411, 1, 1, 4.04298e-06, 0.710114, 0.819104, 1)
+
+[node name="Magic" type="Node2D"]
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+z_index = 10
+amount = 2000
+lifetime = 0.3
+speed_scale = 0.35
+randomness = 0.86
+emission_shape = 1
+emission_sphere_radius = 86.0
+spread = 21.0
+gravity = Vector2(-3000, 0)
+angular_velocity_min = -515.0
+linear_accel_max = 60.0
+scale_amount_max = 2.0
+color = Color(0.720454, 1, 0.996861, 1)
+color_ramp = SubResource("Gradient_pqkl2")

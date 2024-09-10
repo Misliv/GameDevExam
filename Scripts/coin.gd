@@ -10,7 +10,7 @@ func _ready():
 func _process(delta):
 	pass
 
-
+# Coin pick-up and score value.
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.is_in_group('Player'):
 		GameManager.coins += 1

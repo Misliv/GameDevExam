@@ -90,8 +90,10 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_3x1e4"]
 radius = 14.0357
 
-[node name="EnemyBoar" type="CharacterBody2D"]
+[node name="EnemyBoar" type="CharacterBody2D" groups=["Enemy"]]
 z_index = 9
+collision_layer = 9
+collision_mask = 9
 script = ExtResource("1_5oh5q")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
@@ -103,7 +105,7 @@ frame_progress = 0.635226
 
 [node name="RayCast2D" type="RayCast2D" parent="."]
 
-[node name="Area2D" type="Area2D" parent="."]
+[node name="Area2D" type="Area2D" parent="." groups=["Enemy"]]
 z_index = 9
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
