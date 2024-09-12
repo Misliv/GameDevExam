@@ -1,9 +1,17 @@
-[gd_scene load_steps=3 format=3 uid="uid://dfc516ykpqx4y"]
+[gd_scene load_steps=4 format=3 uid="uid://dfc516ykpqx4y"]
 
 [ext_resource type="Script" path="res://Scripts/game_manager.gd" id="1_l2hw6"]
 [ext_resource type="PackedScene" uid="uid://istweh6j0s08" path="res://Scenes/gui.tscn" id="2_oh1t1"]
+[ext_resource type="AudioStream" uid="uid://lqbsdw58ulnl" path="res://Assets/SFX/Retro Ambience 02.wav" id="3_yr3do"]
 
 [node name="GameManager" type="Node"]
 script = ExtResource("1_l2hw6")
 
 [node name="GUI" parent="." instance=ExtResource("2_oh1t1")]
+
+[node name="BackgroundMusic" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_yr3do")
+volume_db = 0.991
+autoplay = true
+
+[node name="CoinPickupSFX" type="AudioStreamPlayer2D" parent="."]

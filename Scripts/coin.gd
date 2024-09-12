@@ -13,6 +13,7 @@ func _process(delta):
 # Coin pick-up and score value.
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.is_in_group('Player'):
+		GameManager.playSoundFX(load("res://Assets/SFX/Retro PickUp Coin 04.wav"))
 		GameManager.coins += 1
 		GameManager.score += 100
 		queue_free()
