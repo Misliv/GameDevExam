@@ -1,12 +1,12 @@
 extends Area2D
 
-var speed = 1200
+var speed = 1500
 var velocity
 var playerObject
 var direction = 1
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func _ready() -> void:
 	playerObject = get_node("../Player").get_node("AnimatedSprite2D")
 	$Timer.connect("timeout", _on_timer_timeout)
 
@@ -19,7 +19,7 @@ func _process(delta: float) -> void:
 	else:
 		velocity = Vector2(1, 0).rotated(rotation_degrees) * speed * delta
 		$Magic/CPUParticles2D.gravity.x = -3000
-		position += velocity
+	position += velocity
 	
 func _on_timer_timeout():
 	queue_free()
