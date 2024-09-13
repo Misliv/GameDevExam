@@ -223,3 +223,9 @@ limit_bottom = 125
 
 [node name="MagicSpawnpoint" type="Node2D" parent="."]
 unique_name_in_owner = true
+
+[node name="WallJumpTimer" type="Timer" parent="."]
+wait_time = 0.4
+one_shot = true
+
+[connection signal="timeout" from="WallJumpTimer" to="." method="_on_wall_jump_timer_timeout"]
