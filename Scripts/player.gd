@@ -13,6 +13,7 @@ var jumpsMade = 0
 var doWallJump = false
 var state = States.IDLE
 var direction
+var runMultiplier = 1
 
 var main_sm: LimboHSM
 
@@ -24,20 +25,7 @@ func _physics_process(delta: float) -> void:
 		velocity += get_gravity() * delta
 	else: jumpsMade = 0
 	
-	# Get the input direction and handle the movement/deceleration.
-	var run_multiplier = 1
 	
-	# Ability to run
-	if Input.is_action_pressed("run"):
-		run_multiplier = 2
-	else:
-		run_multiplier = 1
-	
-	
-	if direction && not doWallJump:
-		velocity.x = direction * SPEED * run_multiplier
-	elif not doWallJump:
-		velocity.x = move_toward(velocity.x, 0, SPEED * run_multiplier)
 	
 	# Ability to shoot out magic.
 	if Input.is_action_just_pressed("magic"):
@@ -55,7 +43,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	
 func handle_state_transitions() -> void:
-	
+	# Get the input direction and handle the movement/deceleration.		
 	if Input.is_action_just_pressed("jump"):
 		state = States.JUMPING
 		if is_on_wall_only():
@@ -67,7 +55,14 @@ func handle_state_transitions() -> void:
 			velocity.y = JUMP_VELOCITY
 			jumpsMade += 1
 			
+		
 	direction = Input.get_axis("left", "right")
+	
+	if Input.is_action_pressed("run"):
+		runMultiplier = 2
+	else:
+		runMultiplier = 1	
+		
 	if direction != 0:
 		# Flip sprite depending on direction you're facing.	
 		if direction < 0:
@@ -77,6 +72,13 @@ func handle_state_transitions() -> void:
 		state = States.MOVING
 	elif is_on_floor() and state != States.JUMPING:
 		state = States.IDLE
+		
+	# Ability to run
+	
+	if direction && not doWallJump:
+		velocity.x = direction * SPEED * runMultiplier
+	elif not doWallJump:
+		velocity.x = move_toward(velocity.x, 0, SPEED * runMultiplier)
 
 func perform_state_actions(delta: float) -> void:
 	match state:
@@ -86,7 +88,7 @@ func perform_state_actions(delta: float) -> void:
 			
 		States.MOVING:
 			animated_sprite_2d.play("run")
-			velocity.x = direction * SPEED
+			velocity.x = direction * SPEED * runMultiplier
 			
 		States.JUMPING:
 			if velocity.y > 0:

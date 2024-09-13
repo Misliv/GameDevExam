@@ -208,7 +208,7 @@ script = ExtResource("1_r7hwi")
 z_index = 10
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_q8rev")
-animation = &"idle"
+animation = &"jump"
 autoplay = "idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
