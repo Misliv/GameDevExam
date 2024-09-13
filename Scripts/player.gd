@@ -6,6 +6,7 @@ extends CharacterBody2D
 const SPEED = 200.0
 const JUMP_VELOCITY = -500.0
 const WALL_SLIDING_SPEED = 1200
+const jump_power = -400
 
 var jumpsMade = 0
 var doWallJump = false
@@ -16,6 +17,7 @@ func _ready():
 	initiate_state_machine()
 
 func _physics_process(delta: float) -> void:
+	print(main_sm.get_active_state())
 	var direction := Input.get_axis("left", "right")
 	# Add the gravity & jump
 	if is_on_wall_only(): velocity.y = WALL_SLIDING_SPEED * delta
@@ -71,9 +73,13 @@ func _physics_process(delta: float) -> void:
 			newMagic.direction = 1
 		newMagic.set_position(%MagicSpawnpoint.global_transform.origin)
 		get_parent().add_child(newMagic)
-			
-		$AnimatedSprite2D.play("attack")
-		
+	
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_released(("jump")):
+		main_sm.dispatch(&"to_jump")
+	elif event.is_action_released(("attack")):
+		main_sm.dispatch(&"to_attack")
+
 func initiate_state_machine():
 	main_sm = LimboHSM.new()
 	add_child(main_sm)
@@ -89,9 +95,12 @@ func initiate_state_machine():
 	main_sm.add_child(attack_state)
 	
 	main_sm.initial_state = idle_state
-	main_sm.add_transition(main_sm.ANYSTATE, idle_state, &"state_ended")
 	
 	main_sm.add_transition(idle_state, run_state, &"to_run")
+	main_sm.add_transition(main_sm.ANYSTATE, idle_state, &"state_ended")
+	main_sm.add_transition(idle_state, jump_state, &"to_jump")
+	main_sm.add_transition(run_state, jump_state, &"to_jump")
+	main_sm.add_transition(main_sm.ANYSTATE, attack_state, &"to_attack")
 	
 	main_sm.initialize(self)
 	main_sm.set_active(true)
@@ -109,9 +118,11 @@ func run_update(delta: float):
 		main_sm.dispatch(&"state_ended")
 	
 func jump_start():
-	pass
+	animation_sprite.play("jump")
+	velocity.y = jump_power
 func jump_update(delta: float):
-	pass
+	if is_on_floor():
+		main_sm.dispatch(&"state_ended")
 		
 func attack_start():
 	pass
