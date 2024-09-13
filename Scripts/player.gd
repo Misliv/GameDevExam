@@ -1,41 +1,27 @@
 extends CharacterBody2D
 
-@onready var animation_sprite = $AnimatedSprite2D
-@onready var animation_player = $AnimationPlayer
+@onready var animated_sprite_2d = $AnimatedSprite2D
 
 const SPEED = 200.0
 const JUMP_VELOCITY = -500.0
 const WALL_SLIDING_SPEED = 1200
-const jump_power = -400
+const JUMP_POWER = -400
+
+enum States {IDLE, MOVING, JUMPING, MAGIC}
 
 var jumpsMade = 0
 var doWallJump = false
-var dir
+var state = States.IDLE
 
 var main_sm: LimboHSM
 
-func _ready():
-	initiate_state_machine()
-
 func _physics_process(delta: float) -> void:
-	print(main_sm.get_active_state())
 	var direction := Input.get_axis("left", "right")
-	# Add the gravity & jump
+	# Add the gravity
 	if is_on_wall_only(): velocity.y = WALL_SLIDING_SPEED * delta
 	elif not is_on_floor():
 		velocity += get_gravity() * delta
 	else: jumpsMade = 0
-	
-	if Input.is_action_just_pressed("jump"):
-		if is_on_wall_only():
-			velocity.y = JUMP_VELOCITY
-			velocity.x = -direction * SPEED
-			doWallJump = true
-			$WallJumpTimer.start()
-			
-		elif is_on_floor() || jumpsMade < 2:
-			velocity.y = JUMP_VELOCITY
-			jumpsMade += 1
 	
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
@@ -53,8 +39,6 @@ func _physics_process(delta: float) -> void:
 	elif not doWallJump:
 		velocity.x = move_toward(velocity.x, 0, SPEED * run_multiplier)
 	
-	
-		
 	# Run or idle animation depending on whether you're running or idling.
 	# Ability to shoot out magic.
 	if Input.is_action_just_pressed("magic"):
@@ -67,72 +51,105 @@ func _physics_process(delta: float) -> void:
 		newMagic.set_position(%MagicSpawnpoint.global_transform.origin)
 		get_parent().add_child(newMagic)
 		
-	flip_sprite(dir)
+	handle_state_transitions()
+	perform_state_actions(delta)
 	move_and_slide()
+	
+func handle_state_transitions() -> void:
+	var direction := Input.get_axis("left", "right")
+	if Input.is_action_just_pressed("jump"):
+		state = States.JUMPING
+		if is_on_wall_only():
+			velocity.y = JUMP_VELOCITY
+			velocity.x = -direction * SPEED
+			doWallJump = true
+			$WallJumpTimer.start()
+		elif is_on_floor() || jumpsMade < 2:
+			velocity.y = JUMP_VELOCITY
+			jumpsMade += 1
+		
+		if direction != 0:
+			if direction < 0:
+				animated_sprite_2d.flip_h = true
+			else:
+				animated_sprite_2d.flip_h = false
+			state = States.MOVING
+		elif is_on_floor() and state != States.JUMPING:
+			state = States.IDLE
+
+func perform_state_actions(delta: float) -> void:
+	match state:
+		States.IDLE:
+			animated_sprite_2d.play("idle")
+			velocity.x = move_toward(velocity.x, 0, SPEED)
+			
+		States.MOVING:
+			animated_sprite_2d.play("run")
+	
 	
 # Flip sprite depending on direction you're facing.	
 func flip_sprite(dir):
-	if velocity.x < 0:
-		animation_sprite.flip_h = true
-	if velocity.x > 0:
-		animation_sprite.flip_h = false
+	pass #if dir ==1:
+	#	animation_sprite.flip_h = true
+	#elif dir == -1:
+	#	animation_sprite.flip_h = false
 	
 	
-func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_released(("jump")):
-		main_sm.dispatch(&"to_jump")
-	elif event.is_action_released(("attack")):
-		main_sm.dispatch(&"to_attack")
-
-func initiate_state_machine():
-	main_sm = LimboHSM.new()
-	add_child(main_sm)
 	
-	var idle_state = LimboState.new().named("idle").call_on_enter(idle_start).call_on_update(idle_update)
-	var run_state = LimboState.new().named("run").call_on_enter(run_start).call_on_update(run_update)
-	var jump_state = LimboState.new().named("jump").call_on_enter(jump_start).call_on_update(jump_update)
-	var attack_state = LimboState.new().named("attack").call_on_enter(attack_start).call_on_update(attack_update)
-	
-	main_sm.add_child(idle_state)
-	main_sm.add_child(run_state)
-	main_sm.add_child(jump_state)
-	main_sm.add_child(attack_state)
-	
-	main_sm.initial_state = idle_state
-	
-	main_sm.add_transition(idle_state, run_state, &"to_run")
-	main_sm.add_transition(main_sm.ANYSTATE, idle_state, &"state_ended")
-	main_sm.add_transition(idle_state, jump_state, &"to_jump")
-	main_sm.add_transition(run_state, jump_state, &"to_jump")
-	main_sm.add_transition(main_sm.ANYSTATE, attack_state, &"to_attack")
-	
-	main_sm.initialize(self)
-	main_sm.set_active(true)
-	
-func idle_start():
-	animation_sprite.play("idle")
-func idle_update(delta: float):
-	if velocity.x != 0:
-		main_sm.dispatch(&"to_run")
-	
-func run_start():
-	animation_sprite.play("run")
-func run_update(delta: float):
-	if velocity.x == 0:
-		main_sm.dispatch(&"state_ended")
-	
-func jump_start():
-	animation_sprite.play("jump")
-	velocity.y = jump_power
-func jump_update(delta: float):
-	if is_on_floor():
-		main_sm.dispatch(&"state_ended")
-		
-func attack_start():
-	animation_sprite.play("attack")
-	animation_player.play("attack")
-func attack_update(delta: float):
-	dir = 1
+#func _unhandled_input(event: InputEvent) -> void:
+	#if event.is_action_released(("jump")):
+		#main_sm.dispatch(&"to_jump")
+	#elif event.is_action_released(("magic")):
+		#main_sm.dispatch(&"to_magic")
+#
+#func initiate_state_machine():
+	#main_sm = LimboHSM.new()
+	#add_child(main_sm)
+	#
+	#var idle_state = LimboState.new().named("idle").call_on_enter(idle_start).call_on_update(idle_update)
+	#var run_state = LimboState.new().named("run").call_on_enter(run_start).call_on_update(run_update)
+	#var jump_state = LimboState.new().named("jump").call_on_enter(jump_start).call_on_update(jump_update)
+	#var magic_state = LimboState.new().named("magic").call_on_enter(magic_start).call_on_update(magic_update)
+	#
+	#main_sm.add_child(idle_state)
+	#main_sm.add_child(run_state)
+	#main_sm.add_child(jump_state)
+	#main_sm.add_child(magic_state)
+	#
+	#main_sm.initial_state = idle_state
+	#
+	#main_sm.add_transition(idle_state, run_state, &"to_run")
+	#main_sm.add_transition(main_sm.ANYSTATE, idle_state, &"state_ended")
+	#main_sm.add_transition(idle_state, jump_state, &"to_jump")
+	#main_sm.add_transition(run_state, jump_state, &"to_jump")
+	#main_sm.add_transition(main_sm.ANYSTATE, magic_state, &"to_magic")
+	#
+	#main_sm.initialize(self)
+	#main_sm.set_active(true)
+	#
+#func idle_start():
+	#animation_sprite.play("idle")
+#func idle_update(delta: float):
+	#if velocity.x != 0:
+		#main_sm.dispatch(&"to_run")
+	#
+#func run_start():
+	#animation_sprite.play("run")
+#func run_update(delta: float):
+	#if velocity.x == 0:
+		#main_sm.dispatch(&"state_ended")
+	#
+#func jump_start():
+	#animation_sprite.play("jump")
+	#velocity.y = jump_power
+#func jump_update(delta: float):
+	#if is_on_floor():
+		#main_sm.dispatch(&"state_ended")
+		#
+#func magic_start():
+	#pass
+#func magic_update(delta: float):
+	#pass
 
 # Player respawn.
 func killPlayer():
