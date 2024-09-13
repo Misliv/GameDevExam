@@ -15,8 +15,6 @@ var state = States.IDLE
 var direction
 var runMultiplier = 1
 
-var main_sm: LimboHSM
-
 func _physics_process(delta: float) -> void:
 	direction = Input.get_axis("left", "right")
 	# Add the gravity
