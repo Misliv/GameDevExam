@@ -10,6 +10,7 @@ const jump_power = -400
 
 var jumpsMade = 0
 var doWallJump = false
+var dir
 
 var main_sm: LimboHSM
 
@@ -52,17 +53,9 @@ func _physics_process(delta: float) -> void:
 	elif not doWallJump:
 		velocity.x = move_toward(velocity.x, 0, SPEED * run_multiplier)
 	
-	# Flip sprite depending on direction you're facing.
-	if velocity.x < 0:
-		$AnimatedSprite2D.flip_h = true
-	if velocity.x > 0:
-		$AnimatedSprite2D.flip_h = false
+	
 		
 	# Run or idle animation depending on whether you're running or idling.
-
-
-	move_and_slide()
-	
 	# Ability to shoot out magic.
 	if Input.is_action_just_pressed("magic"):
 		var magicNode = load("res://Scenes/magic_area.tscn")
@@ -73,6 +66,17 @@ func _physics_process(delta: float) -> void:
 			newMagic.direction = 1
 		newMagic.set_position(%MagicSpawnpoint.global_transform.origin)
 		get_parent().add_child(newMagic)
+		
+	flip_sprite(dir)
+	move_and_slide()
+	
+# Flip sprite depending on direction you're facing.	
+func flip_sprite(dir):
+	if velocity.x < 0:
+		animation_sprite.flip_h = true
+	if velocity.x > 0:
+		animation_sprite.flip_h = false
+	
 	
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_released(("jump")):
@@ -125,9 +129,10 @@ func jump_update(delta: float):
 		main_sm.dispatch(&"state_ended")
 		
 func attack_start():
-	pass
+	animation_sprite.play("attack")
+	animation_player.play("attack")
 func attack_update(delta: float):
-	pass
+	dir = 1
 
 # Player respawn.
 func killPlayer():
