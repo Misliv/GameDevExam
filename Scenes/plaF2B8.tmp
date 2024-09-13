@@ -208,8 +208,7 @@ script = ExtResource("1_r7hwi")
 z_index = 10
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_q8rev")
-animation = &"idle"
-autoplay = "idle"
+animation = &"magic"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 8)

@@ -25,7 +25,6 @@ func _physics_process(delta: float) -> void:
 	else: jumpsMade = 0
 	
 	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
 	var run_multiplier = 1
 	
 	# Ability to run
@@ -56,7 +55,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	
 func handle_state_transitions() -> void:
-	direction = Input.get_axis("left", "right")
+	
 	if Input.is_action_just_pressed("jump"):
 		state = States.JUMPING
 		if is_on_wall_only():
@@ -67,16 +66,17 @@ func handle_state_transitions() -> void:
 		elif is_on_floor() || jumpsMade < 2:
 			velocity.y = JUMP_VELOCITY
 			jumpsMade += 1
-
-		if direction != 0:
-			# Flip sprite depending on direction you're facing.	
-			if direction < 0:
-				animated_sprite_2d.flip_h = true
-			else:
-				animated_sprite_2d.flip_h = false
-			state = States.MOVING
-		elif is_on_floor() and state != States.JUMPING:
-			state = States.IDLE
+			
+	direction = Input.get_axis("left", "right")
+	if direction != 0:
+		# Flip sprite depending on direction you're facing.	
+		if direction < 0:
+			animated_sprite_2d.flip_h = true
+		else:
+			animated_sprite_2d.flip_h = false
+		state = States.MOVING
+	elif is_on_floor() and state != States.JUMPING:
+		state = States.IDLE
 
 func perform_state_actions(delta: float) -> void:
 	match state:
@@ -87,7 +87,12 @@ func perform_state_actions(delta: float) -> void:
 		States.MOVING:
 			animated_sprite_2d.play("run")
 			velocity.x = direction * SPEED
-	
+			
+		States.JUMPING:
+			if velocity.y > 0:
+				animated_sprite_2d.play("idle")
+			else:
+				animated_sprite_2d.play("jump")
 	
 # Player respawn.
 func killPlayer():
