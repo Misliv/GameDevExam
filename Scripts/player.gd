@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-@onready var animated_sprite_2d = $AnimatedSprite2D
+@onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 
 const SPEED = 200.0
 const JUMP_VELOCITY = -500.0
@@ -25,19 +25,6 @@ func _physics_process(delta: float) -> void:
 		velocity += get_gravity() * delta
 	else: jumpsMade = 0
 	
-	
-	
-	# Ability to shoot out magic.
-	if Input.is_action_just_pressed("magic"):
-		var magicNode = load("res://Scenes/magic_area.tscn")
-		var newMagic = magicNode.instantiate()
-		if $AnimatedSprite2D.flip_h == false:
-			newMagic.direction = -1
-		else:
-			newMagic.direction = 1
-		newMagic.set_position(%MagicSpawnpoint.global_transform.origin)
-		get_parent().add_child(newMagic)
-		
 	handle_state_transitions()
 	perform_state_actions(delta)
 	move_and_slide()
@@ -55,10 +42,10 @@ func handle_state_transitions() -> void:
 			velocity.y = JUMP_VELOCITY
 			jumpsMade += 1
 			
-		
 	direction = Input.get_axis("left", "right")
 	
 	if Input.is_action_pressed("run"):
+		state = States.MOVING
 		runMultiplier = 2
 	else:
 		runMultiplier = 1	
@@ -74,17 +61,28 @@ func handle_state_transitions() -> void:
 		state = States.IDLE
 		
 	# Ability to run
-	
 	if direction && not doWallJump:
 		velocity.x = direction * SPEED * runMultiplier
 	elif not doWallJump:
 		velocity.x = move_toward(velocity.x, 0, SPEED * runMultiplier)
-
+		
+	# Ability to shoot out magic.
+	if Input.is_action_just_pressed("magic"):
+		state = States.MAGIC
+		var magicNode = load("res://Scenes/magic_area.tscn")
+		var newMagic = magicNode.instantiate()
+		if $AnimatedSprite2D.flip_h == false:
+			newMagic.direction = -1
+		else:
+			newMagic.direction = 1
+		newMagic.set_position(%MagicSpawnpoint.global_transform.origin)
+		get_parent().add_child(newMagic)
+		
 func perform_state_actions(delta: float) -> void:
 	match state:
 		States.IDLE:
 			animated_sprite_2d.play("idle")
-			velocity.x = 0
+			velocity.x = move_toward(velocity.x, 0, SPEED * runMultiplier)
 			
 		States.MOVING:
 			animated_sprite_2d.play("run")
@@ -92,9 +90,14 @@ func perform_state_actions(delta: float) -> void:
 			
 		States.JUMPING:
 			if velocity.y > 0:
-				animated_sprite_2d.play("idle")
+				animated_sprite_2d.play("fall")
 			else:
 				animated_sprite_2d.play("jump")
+				
+		States.MAGIC:
+			if Input.is_action_just_pressed("magic"):
+				animated_sprite_2d.play("magic")
+			
 	
 # Player respawn.
 func killPlayer():
