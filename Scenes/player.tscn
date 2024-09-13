@@ -208,10 +208,7 @@ script = ExtResource("1_r7hwi")
 z_index = 10
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_q8rev")
-animation = &"attack"
-autoplay = "idle"
-frame = 3
-frame_progress = 0.0511079
+animation = &"idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 8)
