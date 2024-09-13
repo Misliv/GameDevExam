@@ -1,6 +1,7 @@
-[gd_scene load_steps=13 format=4 uid="uid://06mv6wul7oju"]
+[gd_scene load_steps=14 format=4 uid="uid://06mv6wul7oju"]
 
 [ext_resource type="Texture2D" uid="uid://bs38h63u2e1l7" path="res://Assets/Legacy-Fantasy - High Forest 2.3/Assets/Tiles.png" id="1_1sdh7"]
+[ext_resource type="Script" path="res://Scripts/test.gd" id="1_gfl08"]
 [ext_resource type="Texture2D" uid="uid://dt788jmwi7aru" path="res://Assets/Legacy-Fantasy - High Forest 2.3/Assets/Props-Rocks.png" id="2_s8as4"]
 [ext_resource type="PackedScene" uid="uid://cuoodnhlc5hjo" path="res://Scenes/player.tscn" id="3_q11yl"]
 [ext_resource type="PackedScene" uid="uid://cqwnude33lgvu" path="res://Scenes/enemy_boar.tscn" id="4_jpw0g"]
@@ -1314,6 +1315,7 @@ sources/3 = SubResource("TileSetAtlasSource_4lf26")
 size = Vector2(3747, 116)
 
 [node name="Test" type="Node2D"]
+script = ExtResource("1_gfl08")
 
 [node name="Tilemaps" type="Node" parent="."]
 

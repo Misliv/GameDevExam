@@ -1,0 +1,26 @@
+[gd_scene load_steps=2 format=3 uid="uid://d28ejrjtb15y2"]
+
+[ext_resource type="Script" path="res://Scripts/main_menu.gd" id="1_lq4hw"]
+
+[node name="MainMenu" type="Node2D"]
+script = ExtResource("1_lq4hw")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Label" type="Label" parent="CanvasLayer"]
+offset_left = 388.0
+offset_top = 194.0
+offset_right = 771.0
+offset_bottom = 277.0
+theme_override_font_sizes/font_size = 60
+text = "Working Title"
+
+[node name="Button" type="Button" parent="CanvasLayer"]
+offset_left = 474.0
+offset_top = 342.0
+offset_right = 686.0
+offset_bottom = 405.0
+theme_override_font_sizes/font_size = 40
+text = "Play Game"
+
+[connection signal="pressed" from="CanvasLayer/Button" to="." method="_on_button_pressed"]
