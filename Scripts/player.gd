@@ -14,6 +14,7 @@ var doWallJump = false
 var state = States.IDLE
 var direction
 var runMultiplier = 1
+var isAttacking = false
 
 func _physics_process(delta: float) -> void:
 	direction = Input.get_axis("left", "right")
@@ -23,6 +24,7 @@ func _physics_process(delta: float) -> void:
 		velocity += get_gravity() * delta
 	else: jumpsMade = 0
 	
+	magic()
 	handle_state_transitions()
 	perform_state_actions(delta)
 	move_and_slide()
@@ -30,6 +32,7 @@ func _physics_process(delta: float) -> void:
 func handle_state_transitions() -> void:
 	if is_on_floor():
 		state = States.IDLE
+		
 	# Get the input direction and handle the movement/deceleration.		
 	if Input.is_action_just_pressed("jump"):
 		state = States.JUMPING
@@ -95,9 +98,25 @@ func perform_state_actions(delta: float) -> void:
 				animated_sprite_2d.play("jump")
 				
 		States.MAGIC:
-			if Input.is_action_just_pressed("magic"):
 				animated_sprite_2d.play("magic")
-			
+
+func magic():
+	if Input.is_action_just_pressed("magic"):
+		state = States.MAGIC
+		isAttacking = true	
+		var magicNode = load("res://Scenes/magic_area.tscn")
+		var newMagic = magicNode.instantiate()
+		if $AnimatedSprite2D.flip_h == false:
+			newMagic.direction = -1
+		else:
+			newMagic.direction = 1
+		newMagic.set_position(%MagicSpawnpoint.global_transform.origin)
+		get_parent().add_child(newMagic)
+		
+	
+func _on_animated_sprite_2d_finished():
+	if animated_sprite_2d.animation == "magic":
+		isAttacking = false
 	
 # Player respawn.
 func killPlayer():
