@@ -28,6 +28,8 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	
 func handle_state_transitions() -> void:
+	if is_on_floor():
+		state = States.IDLE
 	# Get the input direction and handle the movement/deceleration.		
 	if Input.is_action_just_pressed("jump"):
 		state = States.JUMPING
