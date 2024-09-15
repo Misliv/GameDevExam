@@ -72,16 +72,16 @@ func handle_state_transitions() -> void:
 		velocity.x = move_toward(velocity.x, 0, SPEED * runMultiplier)
 		
 	# Ability to shoot out magic.
-	if Input.is_action_just_pressed("magic"):
-		state = States.MAGIC
-		var magicNode = load("res://Scenes/magic_area.tscn")
-		var newMagic = magicNode.instantiate()
-		if $AnimatedSprite2D.flip_h == false:
-			newMagic.direction = -1
-		else:
-			newMagic.direction = 1
-		newMagic.set_position(%MagicSpawnpoint.global_transform.origin)
-		get_parent().add_child(newMagic)
+	#if Input.is_action_just_pressed("magic"):
+		#state = States.MAGIC
+		#var magicNode = load("res://Scenes/magic_area.tscn")
+		#var newMagic = magicNode.instantiate()
+		#if $AnimatedSprite2D.flip_h == false:
+			#newMagic.direction = -1
+		#else:
+			#newMagic.direction = 1
+		#newMagic.set_position(%MagicSpawnpoint.global_transform.origin)
+		#get_parent().add_child(newMagic)
 		
 func perform_state_actions(delta: float) -> void:
 	match state:
@@ -102,7 +102,7 @@ func perform_state_actions(delta: float) -> void:
 		States.MAGIC:
 				animated_sprite_2d.play("magic")
 
-func magic():
+func magic(): 
 	if Input.is_action_just_pressed("magic"):
 		state = States.MAGIC
 		isAttacking = true	
