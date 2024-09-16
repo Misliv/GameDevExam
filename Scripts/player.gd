@@ -1,12 +1,16 @@
 extends CharacterBody2D
 
 @onready var sprite = $Sprite2D
-@onready var animplayer = $AnimationPlayer
+@onready var anim_player = $AnimationPlayer
+@onready var anim_tree = $AnimationTree
+@onready var state_machine = anim_tree["parameters/playback"]
 
 const SPEED = 200.0
 const JUMP_VELOCITY = -500.0
 const WALL_SLIDING_SPEED = 1200
 const JUMP_POWER = -400
+
+const attack = ["slash"]
 
 enum States {IDLE, MOVING, JUMPING, MAGIC}
 
@@ -87,22 +91,22 @@ func handle_state_transitions() -> void:
 func perform_state_actions(delta: float) -> void:
 	match state:
 		States.IDLE:
-			animplayer.play("idle")
+			anim_player.play("idle")
 			velocity.x = move_toward(velocity.x, 0, SPEED * runMultiplier)
 			
 		States.MOVING:
 			if is_on_floor_only():
-				animplayer.play("run")
+				anim_player.play("run")
 				velocity.x = direction * SPEED * runMultiplier
 			
 		States.JUMPING:
 			if velocity.y < 0:
-				animplayer.play("jump")
+				anim_player.play("jump")
 			elif velocity.y > 0:
-				animplayer.play("fall")
+				anim_player.play("fall")
 				
 		States.MAGIC:
-				animplayer.play("slash")
+				anim_player.play("slash")
 
 func magic(): 
 	if Input.is_action_just_pressed("magic"):
@@ -116,10 +120,9 @@ func magic():
 			newMagic.direction = 1
 		newMagic.set_position(%MagicSpawnpoint.global_transform.origin)
 		get_parent().add_child(newMagic)
-		
 	
 func _on_sprite_finished():
-	if animplayer.animation == "magic":
+	if anim_player.animation == "magic":
 		isAttacking = false
 	
 # Player respawn.
