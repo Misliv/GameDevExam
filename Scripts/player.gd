@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
-@onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
+@onready var sprite = $Sprite2D
+@onready var animplayer = $AnimationPlayer
 
 const SPEED = 200.0
 const JUMP_VELOCITY = -500.0
@@ -58,9 +59,9 @@ func handle_state_transitions() -> void:
 	if direction != 0:
 		# Flip sprite depending on direction you're facing.	
 		if direction < 0:
-			animated_sprite_2d.flip_h = true
+			sprite.flip_h = true
 		else:
-			animated_sprite_2d.flip_h = false
+			sprite.flip_h = false
 		state = States.MOVING
 	elif is_on_floor() and state != States.JUMPING:
 		state = States.IDLE
@@ -86,21 +87,22 @@ func handle_state_transitions() -> void:
 func perform_state_actions(delta: float) -> void:
 	match state:
 		States.IDLE:
-			animated_sprite_2d.play("idle")
+			animplayer.play("idle")
 			velocity.x = move_toward(velocity.x, 0, SPEED * runMultiplier)
 			
 		States.MOVING:
-			animated_sprite_2d.play("run")
-			velocity.x = direction * SPEED * runMultiplier
+			if is_on_floor_only():
+				animplayer.play("run")
+				velocity.x = direction * SPEED * runMultiplier
 			
 		States.JUMPING:
-			if velocity.y > 0:
-				animated_sprite_2d.play("fall")
-			else:
-				animated_sprite_2d.play("jump")
+			if velocity.y < 0:
+				animplayer.play("jump")
+			elif velocity.y > 0:
+				animplayer.play("fall")
 				
 		States.MAGIC:
-				animated_sprite_2d.play("magic")
+				animplayer.play("slash")
 
 func magic(): 
 	if Input.is_action_just_pressed("magic"):
@@ -108,7 +110,7 @@ func magic():
 		isAttacking = true	
 		var magicNode = load("res://Scenes/magic_area.tscn")
 		var newMagic = magicNode.instantiate()
-		if $AnimatedSprite2D.flip_h == false:
+		if sprite.flip_h == false:
 			newMagic.direction = -1
 		else:
 			newMagic.direction = 1
@@ -116,14 +118,14 @@ func magic():
 		get_parent().add_child(newMagic)
 		
 	
-func _on_animated_sprite_2d_finished():
-	if animated_sprite_2d.animation == "magic":
+func _on_sprite_finished():
+	if animplayer.animation == "magic":
 		isAttacking = false
 	
 # Player respawn.
 func killPlayer():
 	position = %RespawnPoint.position
-	$AnimatedSprite2D.flip_h = false
+	sprite.flip_h = false
 
 # Player death.
 func _on_death_area_body_entered(body: Node2D) -> void:
