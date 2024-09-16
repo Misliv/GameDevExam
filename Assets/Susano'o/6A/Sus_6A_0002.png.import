@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://rc7k5laprp0u"
-path="res://.godot/imported/spritesheet.png-6b3e30c4217b3f838247ff1dc0f43cf4.ctex"
+uid="uid://cygpnt0ly5ml"
+path="res://.godot/imported/Sus_6A_0002.png-139e9f09ca8c1c615ade7a3f8d685bd9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Susano'o/Idle/spritesheet.png"
-dest_files=["res://.godot/imported/spritesheet.png-6b3e30c4217b3f838247ff1dc0f43cf4.ctex"]
+source_file="res://Assets/Susano'o/6A/Sus_6A_0002.png"
+dest_files=["res://.godot/imported/Sus_6A_0002.png-139e9f09ca8c1c615ade7a3f8d685bd9.ctex"]
 
 [params]
 
