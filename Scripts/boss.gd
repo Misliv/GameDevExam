@@ -4,7 +4,7 @@ extends CharacterBody2D
 @onready var state_machine = anim_tree["parameters/playback"]
 
 const melee_attacks = ["5A", "5B", "214A"]
-const ranged_attacks = ["6A", "6A 2"]
+const ranged_attacks = ["Jump", "6A"]
 
 @export var player: CharacterBody2D
 
@@ -15,10 +15,19 @@ var p2: Vector2
 var t: float = 1
 var speed: float = 2.0
 
+var facing_right: bool
+
 func _ready():
 	state_machine.travel("Jump")
 	
 func _physics_process(delta: float) -> void:
+	facing_right = (player.position - global_position).x <= 0
+	
+	if facing_right:
+		$Sprite2D.flip_h = false
+	else:
+		$Sprite2D.flip_h = true
+	
 	if t < 1.0:
 		t += speed * delta
 		position = position.bezier_interpolate(p0, p1, p2, t)	
@@ -27,7 +36,13 @@ func jump():
 	t = 0
 	speed = 2.0
 	
-	set_destination(player.position)
+	var correction: Vector2
+	if facing_right:
+		correction = Vector2(25, -7)
+	else:
+		correction = Vector2(-25, -7)
+	
+	set_destination(player.position + correction)
 
 func melee_attack():
 	state_machine.travel(melee_attacks.pick_random())

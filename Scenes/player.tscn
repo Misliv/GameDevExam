@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://cuoodnhlc5hjo"]
+[gd_scene load_steps=20 format=3 uid="uid://cuoodnhlc5hjo"]
 
 [ext_resource type="Script" path="res://Scripts/player.gd" id="1_r7hwi"]
 [ext_resource type="Texture2D" uid="uid://ecki6aekhfnn" path="res://Assets/Legacy-Fantasy - High Forest 2.3/Character/Idle/Idle-Sheet.png" id="1_xanrf"]
@@ -390,40 +390,16 @@ _data = {
 "slash": SubResource("Animation_y64fy")
 }
 
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_wtwrb"]
-animation = &"death"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_o5vgq"]
-animation = &"fall"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_5oif0"]
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_y62q4"]
 animation = &"idle"
 
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_rhxg0"]
-animation = &"jump"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_0sbi5"]
-animation = &"slash"
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_1cclr"]
-advance_mode = 2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_5nmyq"]
-switch_mode = 2
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_5ih53"]
 advance_mode = 2
 
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_v4044"]
-states/death/node = SubResource("AnimationNodeAnimation_wtwrb")
-states/death/position = Vector2(735, 101)
-states/fall/node = SubResource("AnimationNodeAnimation_o5vgq")
-states/fall/position = Vector2(655, 158)
-states/idle/node = SubResource("AnimationNodeAnimation_5oif0")
-states/idle/position = Vector2(324, 101)
-states/jump/node = SubResource("AnimationNodeAnimation_rhxg0")
-states/jump/position = Vector2(566, 160)
-states/slash/node = SubResource("AnimationNodeAnimation_0sbi5")
-states/slash/position = Vector2(445, 54)
-transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_1cclr"), "death", "End", SubResource("AnimationNodeStateMachineTransition_5nmyq")]
+states/idle/node = SubResource("AnimationNodeAnimation_y62q4")
+states/idle/position = Vector2(304, 100)
+transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_5ih53")]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ww1p6"]
 radius = 9.0
