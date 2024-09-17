@@ -28,7 +28,7 @@ var health: float = 100:
 
 	
 func _physics_process(delta: float) -> void:
-	facing_right = (player.position - global_position).x <= 0
+	#facing_right = (player.position - global_position).x <= 0
 	
 	if facing_right:
 		$Sprite2D.flip_h = false

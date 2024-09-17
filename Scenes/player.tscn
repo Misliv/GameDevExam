@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cuoodnhlc5hjo"]
+[gd_scene load_steps=37 format=3 uid="uid://cuoodnhlc5hjo"]
 
 [ext_resource type="Script" path="res://Scripts/player.gd" id="1_r7hwi"]
 [ext_resource type="Texture2D" uid="uid://ecki6aekhfnn" path="res://Assets/Legacy-Fantasy - High Forest 2.3/Character/Idle/Idle-Sheet.png" id="1_xanrf"]
@@ -58,18 +58,6 @@ tracks/3/keys = {
 "update": 1,
 "values": [ExtResource("1_xanrf")]
 }
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("Sprite2D:modulate")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(10, 10, 12.432, 1)]
-}
 
 [sub_resource type="Animation" id="Animation_6jo1o"]
 resource_name = "death"
@@ -127,6 +115,7 @@ tracks/3/keys = {
 [sub_resource type="Animation" id="Animation_a0rwm"]
 resource_name = "fall"
 length = 0.15
+loop_mode = 1
 step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -171,10 +160,10 @@ tracks/3/path = NodePath("Sprite2D:frame")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.05, 0.1),
-"transitions": PackedFloat32Array(1, 1, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [0, 1, 2]
+"values": [0]
 }
 
 [sub_resource type="Animation" id="Animation_jmw4r"]
@@ -402,7 +391,92 @@ _data = {
 "slash": SubResource("Animation_y64fy")
 }
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ptr5g"]
+animation = &"slash"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_7qatr"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_hsjuv"]
+state_machine_type = 1
+states/slash/node = SubResource("AnimationNodeAnimation_ptr5g")
+states/slash/position = Vector2(415, 117)
+transitions = ["Start", "slash", SubResource("AnimationNodeStateMachineTransition_7qatr")]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_sisl3"]
+animation = &"fall"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ta73h"]
+animation = &"jump"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_k3fvh"]
+animation = &"slash"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_rpfp6"]
+priority = 2
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_4fe4d"]
+switch_mode = 2
+advance_mode = 2
+advance_condition = &"can_attack"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_wnyvx"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_aarmr"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_eq8fj"]
+states/fall/node = SubResource("AnimationNodeAnimation_sisl3")
+states/fall/position = Vector2(724, 105)
+states/jump/node = SubResource("AnimationNodeAnimation_ta73h")
+states/jump/position = Vector2(432, 105)
+states/slash/node = SubResource("AnimationNodeAnimation_k3fvh")
+states/slash/position = Vector2(575, 41)
+transitions = ["jump", "fall", SubResource("AnimationNodeStateMachineTransition_rpfp6"), "jump", "slash", SubResource("AnimationNodeStateMachineTransition_4fe4d"), "slash", "fall", SubResource("AnimationNodeStateMachineTransition_wnyvx"), "Start", "jump", SubResource("AnimationNodeStateMachineTransition_aarmr")]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_kslhm"]
+animation = &"idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ejvp2"]
+animation = &"run"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_4y12x"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_yde6s"]
+advance_mode = 2
+advance_condition = &"can_run"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_r32us"]
+advance_mode = 2
+advance_condition = &"is_stopped"
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_fi4n4"]
+states/idle/node = SubResource("AnimationNodeAnimation_kslhm")
+states/idle/position = Vector2(339, 84)
+states/run/node = SubResource("AnimationNodeAnimation_ejvp2")
+states/run/position = Vector2(453, 92)
+transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_4y12x"), "idle", "run", SubResource("AnimationNodeStateMachineTransition_yde6s"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_r32us")]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_avjm6"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_bv747"]
+switch_mode = 2
+advance_mode = 2
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_v4044"]
+states/Attack/node = SubResource("AnimationNodeStateMachine_hsjuv")
+states/Attack/position = Vector2(578, 142)
+states/Jump/node = SubResource("AnimationNodeStateMachine_eq8fj")
+states/Jump/position = Vector2(572, 33)
+states/Movement/node = SubResource("AnimationNodeStateMachine_fi4n4")
+states/Movement/position = Vector2(349, 83)
+transitions = ["Start", "Movement", SubResource("AnimationNodeStateMachineTransition_avjm6"), "Attack", "Movement", SubResource("AnimationNodeStateMachineTransition_bv747")]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ww1p6"]
 radius = 9.0
@@ -412,7 +486,6 @@ height = 48.0
 script = ExtResource("1_r7hwi")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-modulate = Color(10, 10, 12.432, 1)
 top_level = true
 texture_filter = 1
 position = Vector2(0, 7)
@@ -423,12 +496,13 @@ hframes = 4
 libraries = {
 "": SubResource("AnimationLibrary_tcfhw")
 }
-autoplay = "idle"
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
-active = false
 tree_root = SubResource("AnimationNodeStateMachine_v4044")
 anim_player = NodePath("../AnimationPlayer")
+parameters/Jump/conditions/can_attack = false
+parameters/Movement/conditions/can_run = false
+parameters/Movement/conditions/is_stopped = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 8)
