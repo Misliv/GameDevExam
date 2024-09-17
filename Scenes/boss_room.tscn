@@ -503,7 +503,7 @@ sources/0 = SubResource("TileSetAtlasSource_cwey7")
 [node name="BossRoom" type="Node2D"]
 
 [node name="Boss" parent="." node_paths=PackedStringArray("player") instance=ExtResource("1_vlc8a")]
-position = Vector2(218, -150)
+position = Vector2(310, -150)
 player = NodePath("../Player")
 
 [node name="Player" parent="." instance=ExtResource("2_n311k")]
