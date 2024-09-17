@@ -1,0 +1,49 @@
+[gd_scene load_steps=7 format=3 uid="uid://c7wgyrrp1fhma"]
+
+[ext_resource type="Texture2D" uid="uid://dqyxeck0cod8w" path="res://Assets/Legacy-Fantasy - High Forest 2.3/Assets/spr_coin_gri.png" id="1_k8ox6"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7px74"]
+atlas = ExtResource("1_k8ox6")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0sott"]
+atlas = ExtResource("1_k8ox6")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0133t"]
+atlas = ExtResource("1_k8ox6")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n0pnq"]
+atlas = ExtResource("1_k8ox6")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_cxof3"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7px74")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0sott")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0133t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n0pnq")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 6.0
+}]
+
+[node name="JumpResetFeather" type="AnimatedSprite2D"]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_cxof3")
+animation = &"idle"
+frame_progress = 0.554606
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]

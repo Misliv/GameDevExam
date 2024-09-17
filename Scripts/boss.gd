@@ -17,6 +17,15 @@ var speed: float = 2.0
 
 var facing_right: bool
 
+var health: float = 100:
+	set(value):
+		health = value
+		%Healthbar.value = health
+		
+		if value <= 0:
+			state_machine.travel("death")
+			set_physics_process(false)
+
 	
 func _physics_process(delta: float) -> void:
 	facing_right = (player.position - global_position).x <= 0
@@ -84,3 +93,8 @@ func set_destination(final_position):
 func _on_player_entered(_body: Node2D) -> void:
 	%PlayerCollision.set_deferred("disabled", true)
 	ranged_attack()
+	%Healthbar.show()
+	
+func take_damage(amount = 1):
+	health -= amount
+	%VFX.play("hit")
