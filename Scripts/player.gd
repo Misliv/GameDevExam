@@ -27,7 +27,7 @@ func _physics_process(delta: float) -> void:
 	if is_on_wall_only(): velocity.y = WALL_SLIDING_SPEED * delta
 	elif not is_on_floor():
 		velocity += get_gravity() * delta
-	else: jumpsMade = 0
+	else: GameManager.jumps = 0
 	
 	magic()
 	handle_state_transitions()
@@ -48,9 +48,9 @@ func handle_state_transitions() -> void:
 			velocity.x = -direction * SPEED
 			doWallJump = true
 			$WallJumpTimer.start()
-		elif is_on_floor() || jumpsMade < 2:
+		elif is_on_floor() || GameManager.jumps < 2:
 			velocity.y = JUMP_VELOCITY
-			jumpsMade += 1
+			GameManager.jumps += 1
 			
 	direction = Input.get_axis("left", "right")
 	

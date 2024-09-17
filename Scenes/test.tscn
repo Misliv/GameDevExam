@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=4 uid="uid://06mv6wul7oju"]
+[gd_scene load_steps=15 format=4 uid="uid://06mv6wul7oju"]
 
 [ext_resource type="Texture2D" uid="uid://bs38h63u2e1l7" path="res://Assets/Legacy-Fantasy - High Forest 2.3/Assets/Tiles.png" id="1_1sdh7"]
 [ext_resource type="Script" path="res://Scripts/test.gd" id="1_gfl08"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://cuoodnhlc5hjo" path="res://Scenes/player.tscn" id="3_q11yl"]
 [ext_resource type="PackedScene" uid="uid://cqwnude33lgvu" path="res://Scenes/enemy_boar.tscn" id="4_jpw0g"]
 [ext_resource type="PackedScene" uid="uid://dneo6ajmfa6ox" path="res://Scenes/coin.tscn" id="5_0dfuh"]
+[ext_resource type="PackedScene" uid="uid://c7wgyrrp1fhma" path="res://Scenes/jump_reset_feather.tscn" id="7_1bqpl"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gef65"]
 texture = ExtResource("1_1sdh7")
@@ -1364,5 +1365,8 @@ position = Vector2(182, 0)
 [node name="Coin3" parent="Coins" instance=ExtResource("5_0dfuh")]
 z_index = 10
 position = Vector2(203, 0)
+
+[node name="JumpResetFeather" parent="." instance=ExtResource("7_1bqpl")]
+position = Vector2(82, -110)
 
 [connection signal="body_entered" from="DeathArea" to="Player" method="_on_death_area_body_entered"]

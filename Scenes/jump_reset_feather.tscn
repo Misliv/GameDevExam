@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://c7wgyrrp1fhma"]
+[gd_scene load_steps=9 format=3 uid="uid://c7wgyrrp1fhma"]
 
 [ext_resource type="Texture2D" uid="uid://dqyxeck0cod8w" path="res://Assets/Legacy-Fantasy - High Forest 2.3/Assets/spr_coin_gri.png" id="1_k8ox6"]
+[ext_resource type="Script" path="res://Scripts/jump_reset_feather.gd" id="2_48kry"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7px74"]
 atlas = ExtResource("1_k8ox6")
@@ -38,12 +39,21 @@ animations = [{
 "speed": 6.0
 }]
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_xpjur"]
+radius = 6.0
+height = 16.0
+
 [node name="JumpResetFeather" type="AnimatedSprite2D"]
 texture_filter = 1
+scale = Vector2(1.5, 1.5)
 sprite_frames = SubResource("SpriteFrames_cxof3")
 animation = &"idle"
-frame_progress = 0.554606
+frame_progress = 0.511506
+script = ExtResource("2_48kry")
 
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CapsuleShape2D_xpjur")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
