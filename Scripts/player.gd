@@ -124,6 +124,9 @@ func magic():
 func _on_sprite_finished():
 	if anim_player.animation == "magic":
 		isAttacking = false
+
+func take_damage():
+	anim_player.play("hit")
 	
 # Player respawn.
 func killPlayer():

@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://cuoodnhlc5hjo"]
+[gd_scene load_steps=21 format=3 uid="uid://cuoodnhlc5hjo"]
 
 [ext_resource type="Script" path="res://Scripts/player.gd" id="1_r7hwi"]
 [ext_resource type="Texture2D" uid="uid://ecki6aekhfnn" path="res://Assets/Legacy-Fantasy - High Forest 2.3/Character/Idle/Idle-Sheet.png" id="1_xanrf"]
@@ -57,6 +57,18 @@ tracks/3/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [ExtResource("1_xanrf")]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Sprite2D:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(10, 10, 12.432, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_6jo1o"]
@@ -379,8 +391,74 @@ tracks/3/keys = {
 "values": [0, 1, 2, 3, 4, 5, 6, 7]
 }
 
+[sub_resource type="Animation" id="Animation_xhajl"]
+resource_name = "Hit"
+length = 0.150005
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("2_35mxl")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:hframes")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [3]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D:vframes")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite2D:frame")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Sprite2D:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.15),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(2.5, 2.5, 2.5, 1), Color(10, 10, 12.432, 1), Color(2.5, 2.5, 2.5, 1)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_tcfhw"]
 _data = {
+"Hit": SubResource("Animation_xhajl"),
 "RESET": SubResource("Animation_3muya"),
 "death": SubResource("Animation_6jo1o"),
 "fall": SubResource("Animation_a0rwm"),
@@ -409,6 +487,7 @@ height = 48.0
 script = ExtResource("1_r7hwi")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(10, 10, 12.432, 1)
 texture_filter = 1
 position = Vector2(0, 7)
 texture = ExtResource("1_xanrf")

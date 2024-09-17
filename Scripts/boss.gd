@@ -4,7 +4,7 @@ extends CharacterBody2D
 @onready var state_machine = anim_tree["parameters/playback"]
 
 const melee_attacks = ["5A", "5B", "214A"]
-const ranged_attacks = ["Jump", "6A"]
+const ranged_attacks = ["Sword", "6A"]
 
 @export var player: CharacterBody2D
 

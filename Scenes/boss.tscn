@@ -1092,7 +1092,7 @@ states/Jump/position = Vector2(773, 178.18)
 states/Sword/node = SubResource("AnimationNodeAnimation_lqu1r")
 states/Sword/position = Vector2(442, 100)
 transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_wrthl"), "Death", "End", SubResource("AnimationNodeStateMachineTransition_mrqed"), "5A", "Dodge", SubResource("AnimationNodeStateMachineTransition_u6ina"), "5B", "Dodge", SubResource("AnimationNodeStateMachineTransition_82pa3"), "214A", "Dodge", SubResource("AnimationNodeStateMachineTransition_r5ycw"), "5A", "623C", SubResource("AnimationNodeStateMachineTransition_y8k78"), "5B", "623C", SubResource("AnimationNodeStateMachineTransition_w2drt"), "214A", "623C", SubResource("AnimationNodeStateMachineTransition_sc8ax"), "623C", "Dodge", SubResource("AnimationNodeStateMachineTransition_hd1qy"), "Jump", "6A", SubResource("AnimationNodeStateMachineTransition_84k3x"), "6A", "Fall", SubResource("AnimationNodeStateMachineTransition_ms86s"), "Sword", "Idle", SubResource("AnimationNodeStateMachineTransition_py1es")]
-graph_offset = Vector2(0, 14.0328)
+graph_offset = Vector2(0, 52.8033)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_nxvhx"]
 radius = 200.0
@@ -1115,7 +1115,6 @@ libraries = {
 }
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
-active = false
 tree_root = SubResource("AnimationNodeStateMachine_0kor8")
 anim_player = NodePath("../AnimationPlayer")
 parameters/conditions/can_dodge = false
