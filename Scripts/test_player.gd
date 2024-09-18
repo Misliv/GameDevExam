@@ -66,7 +66,7 @@ func _physics_process(delta):
 
 func controls():
 	# Jump and walljump
-	if Input.is_action_just_pressed("jump") and (is_on_floor() or is_on_wall_only()):
+	if Input.is_action_just_pressed("jump") and (is_on_floor() or is_on_wall_only() || GameManager.jumps < 1) :
 		print(velocity.y)
 		print(is_on_wall())
 		
@@ -81,6 +81,7 @@ func controls():
 			state_machine.travel("Jump")
 			
 			velocity.y = jumpVelocity
+			GameManager.jumps += 1
 		print(velocity.y)
 	
 	# Dash	
