@@ -488,6 +488,7 @@ height = 48.0
 script = ExtResource("1_r7hwi")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+top_level = true
 texture_filter = 1
 position = Vector2(0, 7)
 texture = ExtResource("1_xanrf")
