@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=3 uid="uid://di64h560p116k"]
+[gd_scene load_steps=57 format=3 uid="uid://di64h560p116k"]
 
 [ext_resource type="Script" path="res://Scripts/test_player.gd" id="1_5vh01"]
 [ext_resource type="Texture2D" uid="uid://bygjlup4ybhoq" path="res://Assets/Character2/wind_SpriteSheet_288x128.png" id="1_ip5ew"]
@@ -425,10 +425,6 @@ advance_mode = 2
 switch_mode = 2
 advance_mode = 2
 
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ym7jm"]
-switch_mode = 2
-advance_mode = 2
-
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_rg84t"]
 states/Attack/node = SubResource("AnimationNodeStateMachine_vahum")
 states/Attack/position = Vector2(563, 158)
@@ -438,7 +434,7 @@ states/Jump/node = SubResource("AnimationNodeStateMachine_likie")
 states/Jump/position = Vector2(544, 36)
 states/Movement/node = SubResource("AnimationNodeStateMachine_dhwhi")
 states/Movement/position = Vector2(377, 100)
-transitions = ["Start", "Movement", SubResource("AnimationNodeStateMachineTransition_qd40e"), "Attack", "Movement", SubResource("AnimationNodeStateMachineTransition_jolbc"), "Movement", "Jump", SubResource("AnimationNodeStateMachineTransition_ym7jm")]
+transitions = ["Start", "Movement", SubResource("AnimationNodeStateMachineTransition_qd40e"), "Attack", "Movement", SubResource("AnimationNodeStateMachineTransition_jolbc")]
 graph_offset = Vector2(-19, -28)
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tf44i"]
