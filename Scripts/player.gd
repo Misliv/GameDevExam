@@ -137,6 +137,6 @@ func killPlayer():
 func _on_death_area_body_entered(body: Node2D) -> void:
 	killPlayer()
 
-
+# Checks if you can do a walljump
 func _on_wall_jump_timer_timeout() -> void:
 	doWallJump = false

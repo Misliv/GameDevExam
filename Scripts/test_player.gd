@@ -153,6 +153,15 @@ func attack(is_third):
 func _on_reset_timeout() -> void:
 	counter = 0
 
+# Player respawn & respawns you facing right.
+func killPlayer():
+	position = %RespawnPoint.position
+	$Sprite2D.flip_h = false
 
+# Player death.
+func _on_death_area_body_entered(body: Node2D) -> void:
+	killPlayer()
+	
+# Checks if you can do a walljump	
 func _on_wall_jump_timer_timeout() -> void:
 	doWallJump = false

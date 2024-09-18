@@ -440,7 +440,7 @@ graph_offset = Vector2(-19, -28)
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tf44i"]
 height = 38.0
 
-[node name="TestPlayer" type="CharacterBody2D" node_paths=PackedStringArray("animation_tree")]
+[node name="TestPlayer" type="CharacterBody2D" node_paths=PackedStringArray("animation_tree") groups=["Player"]]
 script = ExtResource("1_5vh01")
 animation_tree = NodePath("AnimationTree")
 
