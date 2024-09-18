@@ -2,6 +2,8 @@ extends Node
 
 var coins = 0
 var score = 0
+var jumps = 0
+var wallJumping = false
 
 func playSoundFX(stream):
 	$CoinPickupSFX.stream = stream

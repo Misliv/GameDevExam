@@ -28,5 +28,6 @@ func _on_timer_timeout():
 func _on_area_entered(area: Area2D) -> void:
 	if area.is_in_group("Enemy"):
 		GameManager.score += 500
+		area.take_damage(35)
 		area.get_parent().queue_free()
 		queue_free()

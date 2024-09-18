@@ -4,7 +4,7 @@ extends CharacterBody2D
 @onready var state_machine = anim_tree["parameters/playback"]
 
 const melee_attacks = ["5A", "5B", "214A"]
-const ranged_attacks = ["Jump", "6A"]
+const ranged_attacks = ["Sword", "6A"]
 
 @export var player: CharacterBody2D
 
@@ -17,16 +17,25 @@ var speed: float = 2.0
 
 var facing_right: bool
 
-func _ready():
-	state_machine.travel("Jump")
+var health: float = 100:
+	set(value):
+		health = value
+		%Healthbar.value = health
+		
+		if value <= 0:
+			state_machine.travel("death")
+			set_physics_process(false)
+
 	
 func _physics_process(delta: float) -> void:
-	facing_right = (player.position - global_position).x <= 0
+	#facing_right = (player.position - global_position).x <= 0
 	
 	if facing_right:
 		$Sprite2D.flip_h = false
+		%Hitbox.scale.x = 1
 	else:
 		$Sprite2D.flip_h = true
+		%Hitbox.scale.x = -1
 	
 	if t < 1.0:
 		t += speed * delta
@@ -43,6 +52,18 @@ func jump():
 		correction = Vector2(-25, -7)
 	
 	set_destination(player.position + correction)
+
+func dodge():
+	var direction
+	t = 0
+	speed = 1.5
+	
+	if facing_right:
+		direction = Vector2.LEFT
+	else:
+		direction = Vector2.RIGHT
+		
+	set_destination(position + direction * 100)
 
 func melee_attack():
 	state_machine.travel(melee_attacks.pick_random())
@@ -67,3 +88,13 @@ func set_destination(final_position):
 
 	var tilted_unit_vector = (p2 - p0).normalized().rotated(deg_to_rad(angle))
 	p1 = p0 + 90 * tilted_unit_vector
+
+
+func _on_player_entered(_body: Node2D) -> void:
+	%PlayerCollision.set_deferred("disabled", true)
+	ranged_attack()
+	%Healthbar.show()
+	
+func take_damage(amount = 1):
+	health -= amount
+	%VFX.play("hit")
