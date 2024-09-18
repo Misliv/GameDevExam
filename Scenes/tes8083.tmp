@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=4 uid="uid://06mv6wul7oju"]
+[gd_scene load_steps=18 format=4 uid="uid://06mv6wul7oju"]
 
 [ext_resource type="Texture2D" uid="uid://bs38h63u2e1l7" path="res://Assets/Legacy-Fantasy - High Forest 2.3/Assets/Tiles.png" id="1_1sdh7"]
 [ext_resource type="Script" path="res://Scripts/test.gd" id="1_gfl08"]
@@ -10,7 +10,6 @@
 [ext_resource type="Texture2D" uid="uid://bngt0ywvfspsf" path="res://Assets/Background/background_layer_1.png" id="8_l8pcm"]
 [ext_resource type="Texture2D" uid="uid://73sjjtegt0ej" path="res://Assets/Background/background_layer_2.png" id="9_f3hk2"]
 [ext_resource type="Texture2D" uid="uid://d2pimyvls85t2" path="res://Assets/Background/background_layer_3.png" id="10_m2m5s"]
-[ext_resource type="PackedScene" uid="uid://qtgt8gbwbf8p" path="res://Scenes/door.tscn" id="11_vlqtw"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gef65"]
 texture = ExtResource("1_1sdh7")
@@ -1415,9 +1414,5 @@ position = Vector2(154, -406)
 
 [node name="TestPlayer" parent="." instance=ExtResource("7_qychc")]
 position = Vector2(-39, 15)
-
-[node name="Door" parent="." instance=ExtResource("11_vlqtw")]
-position = Vector2(942, -189)
-destinationLevelTag = "level_1"
 
 [connection signal="body_entered" from="DeathArea" to="TestPlayer" method="_on_death_area_body_entered"]

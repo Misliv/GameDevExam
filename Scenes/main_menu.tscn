@@ -8,12 +8,14 @@ script = ExtResource("1_lq4hw")
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="Label" type="Label" parent="CanvasLayer"]
-offset_left = 388.0
-offset_top = 194.0
-offset_right = 771.0
-offset_bottom = 277.0
+offset_left = 390.0
+offset_top = 192.0
+offset_right = 773.0
+offset_bottom = 275.0
+size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 60
-text = "Working Title"
+text = "Platformer"
+horizontal_alignment = 1
 
 [node name="Button" type="Button" parent="CanvasLayer"]
 offset_left = 474.0

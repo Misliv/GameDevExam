@@ -1,142 +1,187 @@
 extends CharacterBody2D
 
-@onready var sprite = $Sprite2D
-@onready var anim_player = $AnimationPlayer
-@onready var anim_tree = $AnimationTree
-@onready var state_machine = anim_tree["parameters/playback"]
+class_name Player
 
-const SPEED = 200.0
-const JUMP_VELOCITY = -500.0
-const WALL_SLIDING_SPEED = 1200
-const JUMP_POWER = -400
+@export var animation_tree : AnimationTree
+@export var MagicArea : PackedScene
+@export var damage_types : Array[Damage]
 
-const attack = ["slash"]
+var state_machine : AnimationNodeStateMachinePlayback
+var move_state_machine : AnimationNodeStateMachinePlayback
+var jump_state_machine : AnimationNodeStateMachinePlayback
+var attack_state_machine : AnimationNodeStateMachinePlayback
 
-enum States {IDLE, MOVING, JUMPING, MAGIC}
+var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
-var jumpsMade = 0
+var speed : float = 175
+var direction : float
+var counter : int = 0
+var delay : float
+var current_damage
 var doWallJump = false
-var state = States.IDLE
-var direction
-var runMultiplier = 1
-var isAttacking = false
 
-func _physics_process(delta: float) -> void:
+const jumpVelocity = -500.0
+const wallSlidingSpeed = 1200
+
+var on_floor : bool :
+	#Flips sprite
+	set(value):
+		if value == on_floor:
+			if value == true:
+				flip_sprite()
+			return
+		# Transition from falling animation to ground animations.	
+		on_floor = value
+		if value == true:
+			state_machine.travel("Movement")
+		else:
+			state_machine.travel("Jump")
+
+# Prepares the animations		
+func _ready():
+	state_machine = animation_tree.get("parameters/playback")
+	move_state_machine = animation_tree.get("parameters/Movement/playback")
+	jump_state_machine = animation_tree.get("parameters/Jump/playback")
+	attack_state_machine = animation_tree.get("parameters/Attack/playback")
+	
+func _physics_process(delta):
+	# Left and right movement, wall slide, gravity and checks if you have walljumped already.	
+	if delta > 0:
+		delay -= delta
 	direction = Input.get_axis("left", "right")
-	# Add the gravity
-	if is_on_wall_only(): velocity.y = WALL_SLIDING_SPEED * delta
+
+	if is_on_wall_only() && not doWallJump: velocity.y = wallSlidingSpeed * delta
 	elif not is_on_floor():
 		velocity += get_gravity() * delta
-	else: GameManager.jumps = 0
-	
-	magic()
-	handle_state_transitions()
-	perform_state_actions(delta)
+	else:
+		GameManager.jumps = 0
+		GameManager.wallJumping = false
+		
+	if direction && not doWallJump:
+		velocity.x = direction * speed
+	elif not doWallJump:
+		velocity.x = move_toward(velocity.x, 0, speed)
+		
 	move_and_slide()
 	
-func handle_state_transitions() -> void:
-	if is_on_floor():
-		state = States.IDLE
-	elif is_on_floor():
-		state = States.MAGIC	
+	on_floor = is_on_floor()
 	
-	# Get the input direction and handle the movement/deceleration.		
-	if Input.is_action_just_pressed("jump"):
-		state = States.JUMPING
+	# Activates the running animation (only that I think?)
+	if velocity == Vector2.ZERO:
+		set_motion(false)
+	else:
+		set_motion(true)
+	
+	controls()
+
+func controls():
+	# Jump and walljump
+	if Input.is_action_just_pressed("jump") and (is_on_floor() or is_on_wall_only() || GameManager.jumps < 1) :
+		print(velocity.y)
+		print(is_on_wall())
+		
 		if is_on_wall_only():
-			velocity.y = JUMP_VELOCITY
-			velocity.x = -direction * SPEED
+			GameManager.jumps = 1
+			GameManager.wallJumping = true
+			state_machine.travel("Jump")
+			velocity.y = jumpVelocity
+			velocity.x = -direction * speed
 			doWallJump = true
 			$WallJumpTimer.start()
-		elif is_on_floor() || GameManager.jumps < 2:
-			velocity.y = JUMP_VELOCITY
+			move_and_slide()
+			
+		elif is_on_floor() || GameManager.jumps < 1:
+			state_machine.travel("Jump")
+			velocity.y = jumpVelocity
 			GameManager.jumps += 1
-			
-	direction = Input.get_axis("left", "right")
+		print(velocity.y)
 	
-	if Input.is_action_pressed("run"):
-		state = States.MOVING
-		runMultiplier = 2
-	else:
-		runMultiplier = 1	
+	# Dash	
+	if Input.is_action_just_pressed("dash")	 and is_on_floor():
+		move_state_machine.travel("dash")
+		set_speed(300.0)
+		print("test")
+	
+	# Right mouseclick attack	
+	if Input.is_action_just_pressed("attack_right") and is_on_floor():
+		play_attack("3")	
+	
+	# Left mouseclick attack
+	if Input.is_action_just_pressed("attack_left") and delay <= 0:
+		delay = 0.75
+		$Reset.start()
+		if is_on_floor():
+			print(counter)
+			counter += 1
+			attack ((counter % 3 == 0))
+		if not is_on_floor():
+			jump_state_machine.travel("jump_attack")		
+	
+	# Special move
+	if Input.is_action_just_pressed("special") and is_on_floor():
+		play_attack("special")
+		#state_machine.travel("GroupAttack/attack_1")
 		
-	if direction != 0:
-		# Flip sprite depending on direction you're facing.	
-		if direction < 0:
-			sprite.flip_h = true
-		else:
-			sprite.flip_h = false
-		state = States.MOVING
-	elif is_on_floor() and state != States.JUMPING:
-		state = States.IDLE
-		
-	# Ability to run
-	if direction && not doWallJump:
-		velocity.x = direction * SPEED * runMultiplier
-	elif not doWallJump:
-		velocity.x = move_toward(velocity.x, 0, SPEED * runMultiplier)
-		
-	# Ability to shoot out magic.
-	#if Input.is_action_just_pressed("magic"):
-		#state = States.MAGIC
-		#var magicNode = load("res://Scenes/magic_area.tscn")
-		#var newMagic = magicNode.instantiate()
-		#if $AnimatedSprite2D.flip_h == false:
-			#newMagic.direction = -1
-		#else:
-			#newMagic.direction = 1
-		#newMagic.set_position(%MagicSpawnpoint.global_transform.origin)
-		#get_parent().add_child(newMagic)
-		
-func perform_state_actions(delta: float) -> void:
-	match state:
-		States.IDLE:
-			anim_player.play("idle")
-			velocity.x = move_toward(velocity.x, 0, SPEED * runMultiplier)
-			
-		States.MOVING:
-			if is_on_floor_only():
-				anim_player.play("run")
-				velocity.x = direction * SPEED * runMultiplier
-			
-		States.JUMPING:
-			if velocity.y < 0:
-				anim_player.play("jump")
-			elif velocity.y > 0:
-				anim_player.play("fall")
-				
-		States.MAGIC:
-				anim_player.play("slash")
-
-func magic(): 
 	if Input.is_action_just_pressed("magic"):
-		state = States.MAGIC
-		isAttacking = true	
 		var magicNode = load("res://Scenes/magic_area.tscn")
-		var newMagic = magicNode.instantiate()
-		if sprite.flip_h == false:
+		var newMagic = magicNode.instantiate
+		if $Sprite2D.flip_h == false:
 			newMagic.direction = -1
 		else:
 			newMagic.direction = 1
-		newMagic.set_position(%MagicSpawnpoint.global_transform.origin)
+		newMagic.set_position(%MagicSpawnPoint.global_transform.origin)
 		get_parent().add_child(newMagic)
-	
-func _on_sprite_finished():
-	if anim_player.animation == "magic":
-		isAttacking = false
+		play_attack("attack_left")	
 
-func take_damage():
-	anim_player.play("hit")
+# Switches movement conditions		
+func set_motion(value : bool):
+	animation_tree.set("parameters/Movement/conditions/can_run", value)
+	animation_tree.set("parameters/Movement/conditions/is_stopped", not value)
+
+# Sets the speed	
+func set_speed(value: float = 175):
+	speed = value	
+
+# Flips the sprite according to which way you're going	
+func flip_sprite():
+	if direction < 0:
+		$Sprite2D.flip_h = true
+	elif direction > 0:
+		$Sprite2D.flip_h = false
+
+# Plays the attack animations		
+func play_attack(type : String):
+	attack_state_machine.travel("attack_" + type)
 	
-# Player respawn.
+	state_machine.travel("Attack")
+	set_speed(0)
+
+# The ability to attack once or twice depending on how many times you click in a short amount of time.	
+func attack(is_third):
+	print("attacking")
+	if is_third:
+		play_attack("2")
+		counter = 0
+		return
+	play_attack("1")	
+	
+# Resets the attack counter if you do nothing after one click for too long
+func _on_reset_timeout() -> void:
+	counter = 0
+
+# Player respawn & respawns you facing right.
 func killPlayer():
 	position = %RespawnPoint.position
-	sprite.flip_h = false
+	$Sprite2D.flip_h = false
 
 # Player death.
 func _on_death_area_body_entered(body: Node2D) -> void:
 	killPlayer()
-
-# Checks if you can do a walljump
+	
+# Checks if you can do a walljump	
 func _on_wall_jump_timer_timeout() -> void:
 	doWallJump = false
+
+
+#func _on_hitbox_body_entered(body: Node2D) -> void:
+	#body.take_damage(Damage)

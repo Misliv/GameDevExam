@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=3 uid="uid://7pmqf6wl2vfg"]
+[gd_scene load_steps=59 format=3 uid="uid://7pmqf6wl2vfg"]
 
 [ext_resource type="Script" path="res://Scripts/boss.gd" id="1_8b6jl"]
 [ext_resource type="Texture2D" uid="uid://0yd6bqh4gjxn" path="res://Assets/Susano'o/Fall/Sus_Fall.png" id="2_8ofha"]
@@ -1102,6 +1102,10 @@ radius = 200.0
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nsaup"]
 size = Vector2(87.5, 38)
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_jqebf"]
+radius = 28.0
+height = 130.0
+
 [sub_resource type="Animation" id="Animation_gkes4"]
 resource_name = "Hit"
 length = 0.250008
@@ -1190,6 +1194,8 @@ texture_progress = ExtResource("15_0cplg")
 texture_progress_offset = Vector2(52, 47)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-6, 29)
+shape = SubResource("CapsuleShape2D_jqebf")
 
 [node name="VFX" type="AnimationPlayer" parent="."]
 libraries = {
