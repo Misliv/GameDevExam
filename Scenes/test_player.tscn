@@ -473,4 +473,9 @@ shape = SubResource("CapsuleShape2D_tf44i")
 [node name="Reset" type="Timer" parent="."]
 wait_time = 2.0
 
+[node name="WallJumpTimer" type="Timer" parent="."]
+wait_time = 0.4
+one_shot = true
+
 [connection signal="timeout" from="Reset" to="." method="_on_reset_timeout"]
+[connection signal="timeout" from="WallJumpTimer" to="." method="_on_wall_jump_timer_timeout"]

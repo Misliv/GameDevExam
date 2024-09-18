@@ -15,7 +15,7 @@ var counter : int = 0
 var delay : float
 const jumpVelocity = -500.0
 var doWallJump = false
-const WALL_SLIDING_SPEED = 1200
+const wallSlidingSpeed = 1200
 
 var on_floor : bool :
 	#Flips sprite
@@ -44,14 +44,18 @@ func _physics_process(delta):
 		delay -= delta
 	direction = Input.get_axis("left", "right")
 
-	if is_on_wall_only() and (not GameManager.wallJumping): velocity.y = WALL_SLIDING_SPEED * delta
+	if is_on_wall_only() && not doWallJump: velocity.y = wallSlidingSpeed * delta
 	elif not is_on_floor():
 		velocity += get_gravity() * delta
 	else:
 		GameManager.jumps = 0
 		GameManager.wallJumping = false
-	velocity.x = direction * speed
-	#velocity.y = gravity * delta
+		
+	if direction && not doWallJump:
+		velocity.x = direction * speed
+	elif not doWallJump:
+		velocity.x = move_toward(velocity.x, 0, speed)
+		
 	move_and_slide()
 	
 	on_floor = is_on_floor()
@@ -70,14 +74,17 @@ func controls():
 		print(velocity.y)
 		print(is_on_wall())
 		
-		if (GameManager.jumps == 0 and is_on_wall()):
+		if is_on_wall_only():
 			GameManager.jumps = 1
 			GameManager.wallJumping = true
 			state_machine.travel("Jump")
 			velocity.y = jumpVelocity
+			velocity.x = -direction * speed
+			doWallJump = true
+			$WallJumpTimer.start()
 			move_and_slide()
 			
-		else:
+		elif is_on_floor() || GameManager.jumps < 1:
 			state_machine.travel("Jump")
 			
 			velocity.y = jumpVelocity
@@ -145,3 +152,7 @@ func attack(is_third):
 # Resets the attack counter if you do nothing after one click for too long
 func _on_reset_timeout() -> void:
 	counter = 0
+
+
+func _on_wall_jump_timer_timeout() -> void:
+	doWallJump = false
