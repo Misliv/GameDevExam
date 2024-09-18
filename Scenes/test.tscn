@@ -1398,8 +1398,19 @@ position = Vector2(182, 0)
 z_index = 10
 position = Vector2(203, 0)
 
-[node name="JumpResetFeather" parent="." instance=ExtResource("7_1bqpl")]
+[node name="Node" type="Node" parent="."]
+
+[node name="JumpResetFeather" parent="Node" instance=ExtResource("7_1bqpl")]
 position = Vector2(82, -110)
+
+[node name="JumpResetFeather2" parent="Node" instance=ExtResource("7_1bqpl")]
+position = Vector2(157, -221)
+
+[node name="JumpResetFeather3" parent="Node" instance=ExtResource("7_1bqpl")]
+position = Vector2(76, -324)
+
+[node name="JumpResetFeather4" parent="Node" instance=ExtResource("7_1bqpl")]
+position = Vector2(154, -406)
 
 [node name="TestPlayer" parent="." instance=ExtResource("7_qychc")]
 position = Vector2(-39, 15)

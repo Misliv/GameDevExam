@@ -86,7 +86,6 @@ func controls():
 			
 		elif is_on_floor() || GameManager.jumps < 1:
 			state_machine.travel("Jump")
-			
 			velocity.y = jumpVelocity
 			GameManager.jumps += 1
 		print(velocity.y)
