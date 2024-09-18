@@ -1403,3 +1403,5 @@ position = Vector2(82, -110)
 
 [node name="TestPlayer" parent="." instance=ExtResource("7_qychc")]
 position = Vector2(-39, 15)
+
+[connection signal="body_entered" from="DeathArea" to="TestPlayer" method="_on_death_area_body_entered"]
