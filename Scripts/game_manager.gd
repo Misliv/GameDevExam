@@ -7,7 +7,7 @@ var wallJumping = false
 
 func playSoundFX(stream):
 	$CoinPickupSFX.stream = stream
-	$CoinPickupSFX.play()
+d	$CoinPickupSFX.play()
 	
 # Picking up coins updates the UI to increase the amount of coins you have and the score.
 func _process(delta: float) -> void:
